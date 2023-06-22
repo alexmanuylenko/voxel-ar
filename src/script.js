@@ -8,8 +8,7 @@ import { ARButton } from 'three/examples/jsm/webxr/ARButton.js';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 
 let camera, canvas, scene, renderer;
-let fire;
-//let mesh;
+let mesh;
 
 function setupMobileDebug() {
   // for image tracking we need a mobile debug console as it only works on android
@@ -46,18 +45,18 @@ async function init() {
   const loader = new GLTFLoader();
 
   //let fire;
-  loader.load("https://alexmanuylenko.github.io/webxr-assets/fire_scene.glb", function(gltf) {
-    fire = gltf.scene;
+  loader.load("https://alexmanuylenko.github.io/webxr-assets/leela.glb", (gltf) => {
+    mesh = gltf.scene;
     // fire.traverse( function (child) {
     //   if (child.isMesh) {
     //     child.geometry.center();
     //   }
     // });
-    fire.translateY(-0.25);
-    fire.translateZ(-0.45);
-    fire.scale.set(0.025, 0.025, 0.025);
-    fire.visible = false;
-    scene.add(fire);
+    mesh.translateY(-0.25);
+    mesh.translateZ(-0.45);
+    mesh.scale.set(0.05, 0.05, 0.05);
+    mesh.visible = false;
+    scene.add(mesh);
   });
 
   // // setup a cone mesh to put on top of the image target when it is seen
@@ -134,15 +133,12 @@ function render(timestamp, frame) {
 
       if (state == "tracked") {
         console.log("Image target has been found")
-        if (!fire.visible) {
-          fire.visible = true;
-          //mesh.visible = true;
+        if (!mesh.visible) {
+          mesh.visible = true;
           // update the cone mesh when the image target is found
-          fire.matrix.fromArray(pose.transform.matrix);
-          //mesh.matrix.fromArray(pose.transform.matrix);  
+          mesh.matrix.fromArray(pose.transform.matrix);  
         }
       } else if (state == "emulated") {
-        //fire.visible = false;
         //mesh.visible = false;
         console.log("Image target no longer seen")
       }
